@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+import { compare, hash } from 'bcryptjs';
 
-const filePath = path.join(process.cwd(), "scr" , "data", "users.json");
+const filePath = path.join(process.cwd(), "src", "data", "users.json");
 
 export function getAll () {
     const data = fs.readFileSync(filePath);
@@ -18,15 +19,22 @@ export function getByEmail (email) {
     return data.find(p => p.email.toLowerCase() === email.toLowerCase());
 }
 
-export function save (email, password) {
+export async function verifyPassword (hashedPassword, password) {
+    const isValid = await compare(password, hashedPassword);
+    return isValid;
+}
+
+export async function save (email, password) {
     const found = getByEmail(email);
-    if(found){
-        throw new Error("User Already Exist");
+    if (found) {
+        throw new Error("User already exist.");
     }
     const data = getAll();
+    const hashedPassword = await hash(password, 12);
     data.push({
         id: data.length + 1,
-        email, password
+        email,
+        password: hashedPassword
     });
     fs.writeFileSync(filePath, JSON.stringify(data));
 }

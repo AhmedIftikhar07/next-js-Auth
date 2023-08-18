@@ -2,13 +2,13 @@ import Link from "next/link";
 import { useRef } from "react";
 
 export default function Form({ signin, onFormSubmit }) {
-  const emailRef = useRef()
-  const passwordRef = useRef()
-  const onSubmitHandler = (e)=>{
-    const email = emailRef.current.value
-    const password = passwordRef.current.value
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const onSubmitHandler = (e) => {
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
     e.preventDefault();
-    onFormSubmit(email,password)
+    onFormSubmit(email, password);
   }
   return (
     <>
